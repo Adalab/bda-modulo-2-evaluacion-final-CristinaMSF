@@ -1,6 +1,7 @@
 **Proyecto de Consultas en la Base de Datos Sakila**
 
 **Índice**
+
 1. Descripción del Proyecto
 2. ¿Qué ofrezco con mi proyecto?
 3. Estado del Proyecto
@@ -11,6 +12,7 @@
 
 
 **Descripción del proyecto**
+
 Este proyecto consiste en realizar una serie de consultas SQL sobre la base de datos Sakila, que simula una tienda de alquiler de películas. Las consultas están diseñadas para obtener información detallada sobre películas, actores, categorías, clientes y alquileres.
 
 
@@ -23,6 +25,7 @@ Este proyecto consiste en realizar una serie de consultas SQL sobre la base de d
 
 
 **Estado del Proyecto**
+
 - Las consultas SQL están probadas.
 - El código está listo para ser ejecutado en una base de datos Sakila.
 
