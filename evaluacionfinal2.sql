@@ -13,7 +13,7 @@ SELECT DISTINCT title   -- uso DISTINCT porque elimina los valores duplicados en
 SELECT *				-- tabla que utilizo
 	FROM film; 
     
-SELECT title, rating
+SELECT title
 	FROM film
     WHERE rating = "PG-13";
     
@@ -34,7 +34,7 @@ SELECT title, `description`
 SELECT *				-- tabla que utilizo
 	FROM film;
     
-SELECT title, length
+SELECT title
 	FROM film
 	WHERE length > 120;
     
@@ -65,7 +65,7 @@ muchos nombres y apellidos, tardaríamos mucho en revisar*/
 SELECT *					-- tabla que utilizo
 FROM actor; 
 
-SELECT first_name, actor_id
+SELECT first_name
 	FROM actor
     WHERE actor_id BETWEEN 10 AND 20;
 
@@ -74,7 +74,7 @@ SELECT first_name, actor_id
 SELECT *					-- tabla que utilizo
 	FROM film;
 
-SELECT title, rating
+SELECT title
 	FROM film
     WHERE rating != "PG-13" AND rating != "R";
 -- he usado != porque es una exclusión exacta según el enunciado, usaría NOT LIKE si necesite excluir valores que coincidan parcialmente
@@ -181,7 +181,7 @@ SELECT a.first_name, a.last_name
 SELECT *				   -- tabla que utilizo
 FROM film;
 
-SELECT title, `description`
+SELECT title
 	FROM film
     WHERE `description` LIKE '%dog5%' OR `description` LIKE '%cat%';
     
@@ -224,7 +224,7 @@ SELECT *
 SELECT *
 FROM film_category;
     
-SELECT title, c.name
+SELECT title
 	FROM film AS f
     INNER JOIN film_category AS fc ON f.film_id = fc.film_id
     INNER JOIN category AS c ON fc.category_id = c.category_id
@@ -259,7 +259,7 @@ SELECT a.first_name, a.last_name, COUNT(fa.film_id) AS cantidad_peliculas
 SELECT *                     -- tablas que utilizo
 	FROM film;
     
-SELECT title, length 
+SELECT title
 	FROM film
     WHERE rating = "R" AND length > 120;
 
@@ -322,18 +322,29 @@ SELECT *						-- tablas que utilizo
 
 SELECT *
 	FROM rental;
-    
-SELECT f.title 
-	FROM film AS f
-    WHERE f.film_id IN (
-		SELECT r.rental_id 
-			FROM rental AS r
-				WHERE DATEDIFF(r.return_date, r.rental_date) > 5
-);   
 
--- la condición en WHERE con IN filtra las películas cuyo film_id está en el conjunto de resultados de la subconsulta
-/*he hecho una consulta principal para obtener los títulos de las películas donde film_id está en el resultado de 
-la subconsulta y una subconsulta para filtrar los alquileres de la tabla rental con la diferencia de fecha de 5 dias */
+SELECT *
+	FROM inventory;
+    
+SELECT r.rental_id, f.title
+	FROM rental AS r
+	INNER JOIN inventory AS i ON r.inventory_id = i.inventory_id  
+	INNER JOIN film AS f ON i.film_id = f.film_id                
+	WHERE r.rental_id IN (                                     
+					SELECT rental_id                                        
+						FROM rental AS r                                        
+						WHERE DATEDIFF(return_date, rental_date) > 5            
+);
+
+-- primero he creado la subconsulta aparte                                      
+SELECT rental_id                                      
+	FROM rental AS r                                        
+	WHERE DATEDIFF(return_date, rental_date) > 5;
+        
+/* la consulta principal obtiene los rental_id y el title de las películas, filtrando solo aquellas en las que
+la duración de alquiler es mayor a 5 días. La condición en WHERE con IN filtra los alquileres cuyo rental_id está en el 
+conjunto de resultados de la subconsulta. he creado la subconsulta utilizando la función DATEDIFF para calcular la diferencia 
+entre return_date y rental_date, y selecciona aquellos alquileres en la que la duración es mayor a 5 días. */
 
 /*  23. Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría "Horror". 
 Utiliza una subconsulta para encontrar los actores que han actuado en películas de la categoría "Horror" y luego exclúyelos 
@@ -374,7 +385,7 @@ SELECT *						-- tablas que utilizo
 SELECT *
 	FROM category;
 
-SELECT f.title 
+SELECT title 
 	FROM film AS f
     INNER JOIN film_category AS fc ON f.film_id = fc.film_id
     INNER JOIN category AS c ON fc.category_id = c.category_id
