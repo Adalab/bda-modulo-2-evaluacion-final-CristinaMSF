@@ -325,7 +325,15 @@ SELECT *
 
 SELECT *
 	FROM inventory;
+
+-- primero he creado la subconsulta aparte         
+                             
+SELECT rental_id                                      
+	FROM rental AS r                                        
+	WHERE DATEDIFF(return_date, rental_date) > 5;
     
+-- solución final   
+
 SELECT r.rental_id, f.title
 	FROM rental AS r
 	INNER JOIN inventory AS i ON r.inventory_id = i.inventory_id  
@@ -335,11 +343,6 @@ SELECT r.rental_id, f.title
 						FROM rental AS r                                        
 						WHERE DATEDIFF(return_date, rental_date) > 5            
 );
-
--- primero he creado la subconsulta aparte                                      
-SELECT rental_id                                      
-	FROM rental AS r                                        
-	WHERE DATEDIFF(return_date, rental_date) > 5;
         
 /* la consulta principal obtiene los rental_id y el title de las películas, filtrando solo aquellas en las que
 la duración de alquiler es mayor a 5 días. La condición en WHERE con IN filtra los alquileres cuyo rental_id está en el 
@@ -358,6 +361,16 @@ SELECT *
 
 SELECT *
 	FROM category;
+    
+-- primero he creado la subconsulta aparte 
+     
+SELECT fa.actor_id
+			FROM film_actor AS fa
+			INNER JOIN film_category AS fc ON fa.film_id = fc.film_id
+			INNER JOIN category AS c ON fc.category_id = c.category_id
+			WHERE c.name = 'Horror';
+
+-- solución final  
 
 SELECT first_name, last_name
 	FROM actor AS a
